@@ -4,7 +4,7 @@ name: Scrape
 on:
   schedule:
     #Cron = scheduling tool that tells your computer when to run tasks. First, the minute. Second, the hour. Third is the day of the week, fourth is the month, and last is the year. You can google an online tool that'll take an English time expression and translate into cron. This one runs stuff at 8 a.m. UTC every day.
-    cron: "0 8 * * *"
+    - cron: "0 8 * * *"
   workflow_dispatch:
 #What tasks to execute.
 jobs:
