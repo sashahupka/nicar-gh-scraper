@@ -1,36 +1,23 @@
-# This is a basic workflow to help you get started with Actions
-
-name: CI
-
-# Controls when the workflow will run
+#Naming the file.
+name: Scrape
+#When to run.
 on:
-  # Triggers the workflow on push or pull request events but only for the main branch
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-
-  # Allows you to run this workflow manually from the Actions tab
+  schedule:
+    #Cron = scheduling tool that tells your computer when to run tasks. First, the minute. Second, the hour. Third is the day of the week, fourth is the month, and last is the year. You can google an online tool that'll take an English time expression and translate into cron. This one runs stuff at 8 a.m. UTC every day.
+    cron: "0 8 * * *"
   workflow_dispatch:
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+#What tasks to execute.
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  scrape:
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
-
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
-
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+    steps: actions/checkout@v2
+      #Installs and runs pipenv.
+    - name: Install pipenv
+      run: pipx install pipenv
+    - uses: actions/setup-python@v2
+      with:
+        cache: 'pipenv'
+    - run: pipenv install jupyter requests bs4 --python `which python`
+      #Runs scraper.
+    - name: Run scraper
+      run: pipenv run jupyter execute scrape.ipynb
